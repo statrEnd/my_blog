@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html {
+    background-color: rgb(242, 242, 242);
+    padding: 0;
+    margin: 0;
+    /* height: 100vh; */
+}
+
+html,
+body {
+    width: 100vw;
+    overflow-x: hidden;
+}

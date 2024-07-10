@@ -1,0 +1,69 @@
+-- 创建博客文章表  
+CREATE TABLE Blog_Posts (  
+  post_id INT PRIMARY KEY AUTO_INCREMENT, -- 博客文章唯一标识符  
+  title VARCHAR(255) NOT NULL, -- 文章标题  
+  content TEXT NOT NULL, -- 文章内容  
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 文章创建时间  
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- 文章更新时间  
+);  
+  
+-- 创建分类表  
+CREATE TABLE Categories (  
+  category_id INT PRIMARY KEY AUTO_INCREMENT, -- 分类唯一标识符  
+  name VARCHAR(255) NOT NULL, -- 分类名称  
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 创建时间  
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- 更新时间  
+);  
+  
+-- 创建标签表  
+CREATE TABLE Tags (  
+  tag_id INT PRIMARY KEY AUTO_INCREMENT, -- 标签唯一标识符  
+  name VARCHAR(255) NOT NULL, -- 标签名称  
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 创建时间  
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- 更新时间  
+);  
+  
+-- 创建标签与博客文章关联表  
+CREATE TABLE Taggings (  
+  tagging_id INT PRIMARY KEY AUTO_INCREMENT, -- 关联唯一标识符  
+  blog_post_id INT NOT NULL, -- 博客文章ID  
+  tag_id INT NOT NULL, -- 标签ID  
+  FOREIGN KEY (blog_post_id) REFERENCES Blog_Posts(post_id), -- 外键约束，关联博客文章ID  
+  FOREIGN KEY (tag_id) REFERENCES Tags(tag_id) -- 外键约束，关联标签ID  
+);  
+  
+-- 创建用户表  
+CREATE TABLE Users (  
+  user_id INT PRIMARY KEY AUTO_INCREMENT, -- 用户唯一标识符  
+  username VARCHAR(255) NOT NULL, -- 用户名  
+  email VARCHAR(255) NOT NULL, -- 电子邮箱地址  
+  password VARCHAR(255) NOT NULL, -- 密码  
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 创建时间  
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- 更新时间  
+);  
+  
+-- 创建用户角色表  
+CREATE TABLE User_Roles (  
+  role_id INT PRIMARY KEY AUTO_INCREMENT, -- 角色唯一标识符  
+  user_id INT NOT NULL, -- 用户ID  
+  role_name VARCHAR(255) NOT NULL, -- 角色名称（例如管理员、作者）  
+  FOREIGN KEY (user_id) REFERENCES Users(user_id) -- 外键约束，关联用户ID  
+);  
+  
+-- 创建日志表  
+CREATE TABLE Logs (  
+  log_id INT PRIMARY KEY AUTO_INCREMENT, -- 日志唯一标识符  
+  user_id INT NOT NULL, -- 用户ID  
+  action VARCHAR(255) NOT NULL, -- 操作类型（例如创建文章、编辑文章）  
+  object_id INT NOT NULL, -- 操作对象ID（例如被创建或编辑的文章ID）  
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 操作时间  
+  FOREIGN KEY (user_id) REFERENCES Users(user_id) -- 外键约束，关联用户ID  
+);  
+  
+-- 创建评论表  
+CREATE TABLE Comments (  
+  comment_id INT PRIMARY KEY AUTO_INCREMENT, -- 评论唯一标识符  
+  user_id INT NOT NULL, -- 用户ID  
+  blog_post_id INT NOT NULL, -- 博客文章ID  
+  content TEXT NOT NULL, -- 评论内容  
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 评论创建时间，设置默认值为当前时间戳，自动递增增加时间戳值以保留评论的顺序和时间戳的精确性。默认值在MySQL中可以设置为CURRENT_TIMESTAMP。同时，设置ON UPDATE CURRENT_TIMESTAMP可以在更新时自动更新评论的更新时间。这确保了评论的时间戳始终是最新的。当您查看评论时，您将看到最新的评论排在前面。这是因为在MySQL中，默认值是只读的，因此不能在默认值中使用函数。因此，为了在默认值中使用函数，我们需要使用ON UPDATE CURRENT_TIMESTAMP。这样，每次更新时都会自动更新时间戳。这样做的目的是为了确保每次更新时都会自动更新时间戳。这样做的目的是为了确保每次更新时都会自动更新时间戳。这样做的目的是为了确保每次
